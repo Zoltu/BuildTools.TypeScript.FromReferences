@@ -1,0 +1,40 @@
+branches:
+  only:
+    - master
+
+skip_tags: true
+
+version: "{build}"
+
+assembly_info:
+  patch: false
+
+platform:
+  - Any CPU
+
+configuration:
+  - Release
+
+before_build:
+  - cmd: nuget restore
+
+build:
+  project: BuildTools.TypeScript.FromReferences.sln
+  verbosity: minimal
+
+artifacts:
+  - path: Code/bin/**/*.nupkg
+  - path: Code/bin/**/*.dll
+  - path: Code/bin/**/*.pdb
+
+#deploy:
+#  provider: NuGet
+#  server: https://www.myget.org/F/zoltu/api/v2/package
+#  symbol_server: https://nuget.symbolsource.org/MyGet/zoltu
+#  api_key:
+#    secure: gQK8fDhBmndoA7DtKarqD63BFRX8HLkQ1Ma4Rbz6yThwbUNn2OT/0L10h5vvKH+w
+
+#deploy:
+#  provider: NuGet
+#  api_key:
+#    secure: X6YnwwH05dy0122NypnAz4w1ti39JQ49I8bQqDsLHzUwAp1rhvm6yvPo03EpwD8e
