@@ -7,7 +7,7 @@
     <ProjectGuid>{224FEFD0-5E00-458D-AA8E-2C6B4698FF22}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Zoltu.BuildTools.TypeScript.FromReferences</RootNamespace>
+    <RootNamespace>Zoltu.BuildTools.TypeScript</RootNamespace>
     <AssemblyName>Zoltu.BuildTools.TypeScript.FromReferencesTask</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -118,21 +118,32 @@
     <CodeContractsAnalysisWarningLevel>3</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="Zoltu.Collections.Generic.NotNull">
+      <HintPath>..\packages\Zoltu.Collections.Generic.NotNull.1.0.15.0\lib\net40\Zoltu.Collections.Generic.NotNull.dll</HintPath>
+    </Reference>
+    <Reference Include="Zoltu.Linq.NotNull">
+      <HintPath>..\packages\Zoltu.Linq.NotNull.1.0.36.0\lib\net45\Zoltu.Linq.NotNull.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FromReferencesTask.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="code.nuspec" />
+    <None Include="code.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\nuget.props" />
     <None Include="packages.config" />
+    <None Include="Zoltu.BuildTools.TypeScript.FromReferencesTask.targets">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(ProjectDir)Properties\nuget.props" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

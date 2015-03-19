@@ -8,13 +8,11 @@
 		<language>en-US</language>
 		<projectUrl>https://github.com/Zoltu/BuildTools.TypeScript.FromReferences</projectUrl>
 		<licenseUrl>https://github.com/Zoltu/BuildTools.TypeScript.FromReferences/blob/master/LICENSE</licenseUrl>
-		<tags></tags>
-		<developmentDependency>false</developmentDependency>
-		<references>
-			<reference file="Zoltu.BuildTools.TypeScript.FromReferencesTask.dll" />
-		</references>
+		<tags>build tools typescript project references</tags>
+		<developmentDependency>true</developmentDependency>
 	</metadata>
 	<files>
-		<file src="CodeContracts\*.dll" target="lib\net451\CodeContracts" />
+		<file src="Zoltu.BuildTools.TypeScript.FromReferencesTask.targets" target="build" />
+		<file src="**\*.dll" target="build" exclude="CodeContracts\*" />
 	</files>
 </package>

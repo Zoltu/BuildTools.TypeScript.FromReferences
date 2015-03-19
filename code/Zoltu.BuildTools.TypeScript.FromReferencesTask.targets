@@ -1,0 +1,7 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<UsingTask TaskName="Zoltu.BuildTools.TypeScript.FromReferencesTask" AssemblyFile="$(MSBuildThisFileDirectory)Zoltu.BuildTools.TypeScript.FromReferencesTask.dll" />
+
+	<Target Name="CopyTypeScriptReferences" BeforeTargets="CompileTypeScript">
+		<Zoltu.BuildTools.TypeScript.FromReferencesTask ProjectFullPath="$(MSBuildProjectFullPath)" />
+	</Target>
+</Project>
