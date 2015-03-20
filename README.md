@@ -25,7 +25,7 @@ How To Use
 1. Build the solution.
 
 Why Rename .ts to .ts.source?
-=============================
+-----------------------------
 If you were to copy `MyModule.ts` into project B, you would run into some subtle problems.  The primary one is that if you use Visual Studio's `Go To Definition` in `MyApp.ts`, it will take you to the .ts file.  At first, this sounds great, but the problem is that it takes you to the *copy* of `MyModule.ts` that is in the libraries folder of project B.  If you were to make changes to this file, your changes would be overwritten with the original `MyModule.ts` (from project A) as soon as you compiled again.  To work around this, we copy `MyModule.ts` to project B with a different name.
 
 What happens when you use `Go To Definition` in Visual Studio then?  It will simply take you to the .d.ts file, which is much more obvious that you shouldn't modify.  You will still get full intellisense because the .d.ts contains all of the information necessary to populate the intellisense menus, you just don't see the full source code for your functions.
