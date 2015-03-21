@@ -22,6 +22,13 @@ namespace Zoltu.BuildTools.TypeScript
 		}
 		private String _projectFullPath;
 
+		public String TypeScriptLibraryFullPath
+		{
+			get { return _typeScriptLibraryFullPath; }
+			set { _typeScriptLibraryFullPath = value; }
+		}
+		private String _typeScriptLibraryFullPath;
+
 		public override Boolean Execute()
 		{
 			try
@@ -34,8 +41,9 @@ namespace Zoltu.BuildTools.TypeScript
 				if (projectDirectoryPath == null)
 					throw new NullReferenceException("projectDirectoryPath");
 
-				var librariesDirectory = Path.Combine(project.DirectoryPath, "libraries");
-				Directory.CreateDirectory(librariesDirectory);
+				if (String.IsNullOrEmpty(TypeScriptLibraryFullPath))
+					TypeScriptLibraryFullPath = Path.Combine(project.DirectoryPath, "libraries");
+				Directory.CreateDirectory(TypeScriptLibraryFullPath);
 
 				var typeScriptFullPaths = GetReferencedProjects(project)
 					.NotNullToNull()
@@ -50,10 +58,10 @@ namespace Zoltu.BuildTools.TypeScript
 					var sourceFileName = Path.GetFileNameWithoutExtension(typeScriptFullPath);
 					Contract.Assume(!String.IsNullOrEmpty(sourceFileName));
 
-					CopyFile(sourceDirectoryPath, sourceFileName, librariesDirectory, ".d.ts", ".d.ts");
-					CopyFile(sourceDirectoryPath, sourceFileName, librariesDirectory, ".js", ".js");
-					var tsSourceFilePath = CopyFile(sourceDirectoryPath, sourceFileName, librariesDirectory, ".ts", ".ts.source");
-					var jsMapFilePath = CopyFile(sourceDirectoryPath, sourceFileName, librariesDirectory, ".js.map", ".js.map");
+					CopyFile(sourceDirectoryPath, sourceFileName, TypeScriptLibraryFullPath, ".d.ts", ".d.ts");
+					CopyFile(sourceDirectoryPath, sourceFileName, TypeScriptLibraryFullPath, ".js", ".js");
+					var tsSourceFilePath = CopyFile(sourceDirectoryPath, sourceFileName, TypeScriptLibraryFullPath, ".ts", ".ts.source");
+					var jsMapFilePath = CopyFile(sourceDirectoryPath, sourceFileName, TypeScriptLibraryFullPath, ".js.map", ".js.map");
 
 					UpdateSourceMap(sourceFileName, jsMapFilePath, tsSourceFilePath);
 				};
