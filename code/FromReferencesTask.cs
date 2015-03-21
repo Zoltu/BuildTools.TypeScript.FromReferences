@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
@@ -22,17 +21,21 @@ namespace Zoltu.BuildTools.TypeScript
 		}
 		private String _projectFullPath;
 
-		public String TypeScriptLibraryFullPath
+		[Required]
+		public String LibraryDirectoryFullPath
 		{
-			get { return _typeScriptLibraryFullPath; }
-			set { _typeScriptLibraryFullPath = value; }
+			get { return _libraryDirectoryFullPath; }
+			set { _libraryDirectoryFullPath = value; }
 		}
-		private String _typeScriptLibraryFullPath;
+		private String _libraryDirectoryFullPath;
 
 		public override Boolean Execute()
 		{
 			try
 			{
+				Contract.Assume(!String.IsNullOrEmpty(ProjectFullPath));
+				Contract.Assume(!String.IsNullOrEmpty(LibraryDirectoryFullPath));
+
 				var project = ProjectRootElement.Open(ProjectFullPath);
 				if (project == null)
 					throw new NullReferenceException("project");
@@ -41,9 +44,7 @@ namespace Zoltu.BuildTools.TypeScript
 				if (projectDirectoryPath == null)
 					throw new NullReferenceException("projectDirectoryPath");
 
-				if (String.IsNullOrEmpty(TypeScriptLibraryFullPath))
-					TypeScriptLibraryFullPath = Path.Combine(project.DirectoryPath, "libraries");
-				Directory.CreateDirectory(TypeScriptLibraryFullPath);
+				Directory.CreateDirectory(LibraryDirectoryFullPath);
 
 				var typeScriptFullPaths = GetReferencedProjects(project)
 					.NotNullToNull()
@@ -58,10 +59,10 @@ namespace Zoltu.BuildTools.TypeScript
 					var sourceFileName = Path.GetFileNameWithoutExtension(typeScriptFullPath);
 					Contract.Assume(!String.IsNullOrEmpty(sourceFileName));
 
-					CopyFile(sourceDirectoryPath, sourceFileName, TypeScriptLibraryFullPath, ".d.ts", ".d.ts");
-					CopyFile(sourceDirectoryPath, sourceFileName, TypeScriptLibraryFullPath, ".js", ".js");
-					var tsSourceFilePath = CopyFile(sourceDirectoryPath, sourceFileName, TypeScriptLibraryFullPath, ".ts", ".ts.source");
-					var jsMapFilePath = CopyFile(sourceDirectoryPath, sourceFileName, TypeScriptLibraryFullPath, ".js.map", ".js.map");
+					CopyFile(sourceDirectoryPath, sourceFileName, LibraryDirectoryFullPath, ".d.ts", ".d.ts");
+					CopyFile(sourceDirectoryPath, sourceFileName, LibraryDirectoryFullPath, ".js", ".js");
+					var tsSourceFilePath = CopyFile(sourceDirectoryPath, sourceFileName, LibraryDirectoryFullPath, ".ts", ".ts.source");
+					var jsMapFilePath = CopyFile(sourceDirectoryPath, sourceFileName, LibraryDirectoryFullPath, ".js.map", ".js.map");
 
 					UpdateSourceMap(sourceFileName, jsMapFilePath, tsSourceFilePath);
 				};
