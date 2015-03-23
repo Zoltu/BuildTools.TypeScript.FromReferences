@@ -48,8 +48,8 @@ namespace Zoltu.BuildTools.TypeScript
 
 				var typeScriptFullPaths = GetReferencedProjects(project)
 					.NotNullToNull()
-					.SelectMany(x => GetTypeScriptItems(x).NotNullToNull(), GetTypeScriptFileFullPath)
 					.Skip(1)
+					.SelectMany(x => GetTypeScriptItems(x).NotNullToNull(), GetTypeScriptFileFullPath)
 					.NotNull();
 
 				foreach (var typeScriptFullPath in typeScriptFullPaths)
