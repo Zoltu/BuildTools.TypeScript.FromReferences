@@ -1,5 +1,7 @@
 # Zoltu BuildTools: TypeScript from References
 
+[![Join the chat at https://gitter.im/Zoltu/BuildTools.TypeScript.FromReferences](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Zoltu/BuildTools.TypeScript.FromReferences?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build status](http://img.shields.io/appveyor/ci/Zoltu/buildtools-typescript-fromreferences.svg)](https://ci.appveyor.com/project/Zoltu/buildtools-typescript-fromreferences)
 [![NuGet Status](http://img.shields.io/nuget/v/Zoltu.BuildTools.TypeScript.FromReferencesTask.svg)](https://www.nuget.org/packages/Zoltu.BuildTools.TypeScript.FromReferencesTask/)
 
