@@ -98,7 +98,10 @@ namespace Zoltu.BuildTools.TypeScript
 			Contract.Requires(project != null);
 			Contract.Ensures(Contract.Result<INotNullEnumerable<ProjectItemElement>>() != null);
 
-			return project.Items.NotNull().Where(item => item.ItemType == "TypeScriptCompile");
+			return project.Items.NotNull()
+				.Where(item => item.ItemType == "TypeScriptCompile")
+				.Where(item => item.Include.EndsWith(".ts"))
+				.Where(item => !item.Include.EndsWith(".d.ts"));
 		}
 
 		private static String GetTypeScriptFileFullPath(ProjectRootElement project, ProjectItemElement typeScriptItem)
