@@ -6,6 +6,7 @@
 		<authors>$author$</authors>
 		<description>$description$</description>
 		<language>en-US</language>
+		<iconUrl>https://blob.zoltu.com/images/zoltu-icon-64x64.png</iconUrl>
 		<projectUrl>https://github.com/Zoltu/BuildTools.TypeScript.FromReferences</projectUrl>
 		<licenseUrl>https://github.com/Zoltu/BuildTools.TypeScript.FromReferences/blob/master/LICENSE</licenseUrl>
 		<tags>build tools typescript project references</tags>
