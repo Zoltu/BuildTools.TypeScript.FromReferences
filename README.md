@@ -42,6 +42,6 @@ What if I don't want the .ts or .js.map files to be copied?
 -----------------------------------------------------------
 If you don't want the .ts or .js.map files to be copied over then you can add a property to a propertygroup (same as for changing the library Path). This property should be:
 
-<TypeScriptLibraryCopyAll>false</TypeScriptLibraryCopyAll>
+`<TypeScriptLibraryCopyAll>false</TypeScriptLibraryCopyAll>`
 
 The default value for this property (if it is ommitted) is true so it will copy over your .ts and .js.map files (though see note on renaming of .ts files).
