@@ -37,3 +37,11 @@ Why then do we copy `MyModule.ts` at all if we are just going to rename it so Vi
 How to Change the Library Path
 ---------------------------
 If you want the copied files to go somewhere other than $(ProjectDir)libraries then you just need to add a property to a PropertyGroup of your .csproj file like `<TypeScriptLibraryFullPath>app\scripts</TypeScriptLibraryFullPath>`.
+
+What if I don't want the .ts or .js.map files to be copied?
+-----------------------------------------------------------
+If you don't want the .ts or .js.map files to be copied over then you can add a property to a propertygroup (same as for changing the library Path). This property should be:
+
+<TypeScriptLibraryCopyAll>false</TypeScriptLibraryCopyAll>
+
+The default value for this property (if it is ommitted) is true so it will copy over your .ts and .js.map files (though see note on renaming of .ts files).
