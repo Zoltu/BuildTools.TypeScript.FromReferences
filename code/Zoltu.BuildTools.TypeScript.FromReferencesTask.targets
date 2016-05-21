@@ -4,7 +4,8 @@
 	<Target Name="CopyTypeScriptReferences" BeforeTargets="CompileTypeScript">
 		<PropertyGroup>
 			<TypeScriptLibraryFullPath Condition=" '$(TypeScriptLibraryFullPath)' == '' ">$(ProjectDir)libraries</TypeScriptLibraryFullPath>
+			<TypeScriptLibraryCopyAll Condition=" '$(TypeScriptLibraryCopyAll)' == '' ">true</TypeScriptLibraryCopyAll>
 		</PropertyGroup>
-		<Zoltu.BuildTools.TypeScript.FromReferencesTask ProjectFullPath="$(MSBuildProjectFullPath)" LibraryDirectoryFullPath="$(TypeScriptLibraryFullPath)"/>
+		<Zoltu.BuildTools.TypeScript.FromReferencesTask ProjectFullPath="$(MSBuildProjectFullPath)" LibraryDirectoryFullPath="$(TypeScriptLibraryFullPath)" CopyAll="$(TypeScriptLibraryCopyAll)"/>
 	</Target>
 </Project>

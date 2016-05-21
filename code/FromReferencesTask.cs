@@ -29,6 +29,14 @@ namespace Zoltu.BuildTools.TypeScript
 		}
 		private String _libraryDirectoryFullPath;
 
+		[Required]
+		public bool CopyAll
+		{
+			get { return _copyAll; }
+			set { _copyAll = value; }
+		}
+		private bool _copyAll;
+
 		public override Boolean Execute()
 		{
 			try
@@ -61,10 +69,13 @@ namespace Zoltu.BuildTools.TypeScript
 
 					CopyFile(sourceDirectoryPath, sourceFileName, LibraryDirectoryFullPath, ".d.ts", ".d.ts");
 					CopyFile(sourceDirectoryPath, sourceFileName, LibraryDirectoryFullPath, ".js", ".js");
-					var tsSourceFilePath = CopyFile(sourceDirectoryPath, sourceFileName, LibraryDirectoryFullPath, ".ts", ".ts.source");
-					var jsMapFilePath = CopyFile(sourceDirectoryPath, sourceFileName, LibraryDirectoryFullPath, ".js.map", ".js.map");
+					if (CopyAll)
+					{
+						var tsSourceFilePath = CopyFile(sourceDirectoryPath, sourceFileName, LibraryDirectoryFullPath, ".ts", ".ts.source");
+						var jsMapFilePath = CopyFile(sourceDirectoryPath, sourceFileName, LibraryDirectoryFullPath, ".js.map", ".js.map");
 
-					UpdateSourceMap(sourceFileName, jsMapFilePath, tsSourceFilePath);
+						UpdateSourceMap(sourceFileName, jsMapFilePath, tsSourceFilePath);
+					}
 				};
 
 				return true;
