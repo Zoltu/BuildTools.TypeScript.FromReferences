@@ -104,7 +104,7 @@ namespace Zoltu.BuildTools.TypeScript
 		{
 			Contract.Requires(sourceProjectBasePath != null);
 			Contract.Requires(sourceDirectoryPath != null);
-			Contract.Ensures(!String.IsNullOrEmpty(Contract.Result<string>()));
+			Contract.Ensures(Contract.Result<string>()!=null);
 			Contract.Assume(sourceDirectoryPath.Length > sourceProjectBasePath.Length);
 			Contract.Assume(!String.IsNullOrEmpty(LibraryDirectoryFullPath));
 			var rootRelativePath = sourceDirectoryPath.Remove(0, sourceProjectBasePath.Length);
