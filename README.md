@@ -38,8 +38,6 @@ How to Change the Library Path
 ---------------------------
 If you want the copied files to go somewhere other than $(ProjectDir)libraries then you just need to add a property to a PropertyGroup of your .csproj file like `<TypeScriptLibraryFullPath>app\scripts</TypeScriptLibraryFullPath>`.
 
-Additionally the default behaviour is to copy all files to the specified directory. If you want to preserve the folder structure of your TypeScript project then you can use the `TypeScriptLibraryUseDirectoryStructure` property like `<TypeScriptLibraryUseDirectoryStructure>true</TypeScriptLibraryUseDirectoryStructure>`. When this property is set to true it will use the folder structure of your Typescript project from the project root. So for example if you have a typescript file in `Scripts/Module1/MyScript.ts` then it will be copied to the `Scripts/Module1` directory in your library output folder. This setting defaults to false.
-
 What if I don't want the .ts or .js.map files to be copied?
 -----------------------------------------------------------
 If you don't want the .ts or .js.map files to be copied over then you can add a property to a propertygroup (same as for changing the library Path). This property should be:

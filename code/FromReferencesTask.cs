@@ -37,20 +37,10 @@ namespace Zoltu.BuildTools.TypeScript
 		}
 		private bool _copyAll;
 
-		[Required]
-		public bool UseSourceDirectoryStructure
-		{
-			get { return _useSourceDirectoryStructure; }
-			set { _useSourceDirectoryStructure = value; }
-		}
-		private bool _useSourceDirectoryStructure;
-		
-
 		public override Boolean Execute()
 		{
 			try
 			{
-				System.Diagnostics.Debugger.Launch();
 				Contract.Assume(!String.IsNullOrEmpty(ProjectFullPath));
 				Contract.Assume(!String.IsNullOrEmpty(LibraryDirectoryFullPath));
 
@@ -64,23 +54,26 @@ namespace Zoltu.BuildTools.TypeScript
 
 				Directory.CreateDirectory(LibraryDirectoryFullPath);
 
-				IEnumerable<ProjectRootElement> referencedProjects = GetReferencedProjects(project)
-									.NotNullToNull()
-									.Skip(1);
+				var referencedProjects = GetReferencedProjects(project)
+					.NotNullToNull()
+					.Skip(1)
+					.NotNull();
 
-				foreach (ProjectRootElement referencedProject in referencedProjects)
+				foreach (var referencedProject in referencedProjects)
 				{
 					var sourceProjectBasePath = referencedProject.DirectoryPath;
+					Contract.Assume(sourceProjectBasePath != null);
 					var typeScriptFullPaths = GetTypeScriptItems(referencedProject)
 						.NotNullToNull()
-						.Select(x => GetTypeScriptFileFullPath(referencedProject, x));
+						.Select(x => GetTypeScriptFileFullPath(referencedProject, x))
+						.NotNull();
 
 					foreach (var typeScriptFullPath in typeScriptFullPaths)
 					{
 						var sourceDirectoryPath = Path.GetDirectoryName(typeScriptFullPath);
+						Contract.Assume(!String.IsNullOrEmpty(sourceDirectoryPath));
 						string destinationPath = GetDestinationPath(sourceProjectBasePath, sourceDirectoryPath);
 						Directory.CreateDirectory(destinationPath);
-						Contract.Assume(!String.IsNullOrEmpty(sourceDirectoryPath));
 						var sourceFileName = Path.GetFileNameWithoutExtension(typeScriptFullPath);
 						Contract.Assume(!String.IsNullOrEmpty(sourceFileName));
 
@@ -109,19 +102,16 @@ namespace Zoltu.BuildTools.TypeScript
 
 		private string GetDestinationPath(string sourceProjectBasePath, string sourceDirectoryPath)
 		{
-			if (UseSourceDirectoryStructure)
+			Contract.Requires(sourceProjectBasePath != null);
+			Contract.Requires(sourceDirectoryPath != null);
+			Contract.Assume(sourceDirectoryPath.Length > sourceProjectBasePath.Length);
+			Contract.Assume(!String.IsNullOrEmpty(LibraryDirectoryFullPath));
+			var rootRelativePath = sourceDirectoryPath.Remove(0, sourceProjectBasePath.Length);
+			if (rootRelativePath[0] == '\\')
 			{
-				var rootRelativePath = sourceDirectoryPath.Remove(0, sourceProjectBasePath.Length);
-				if (rootRelativePath[0] == '\\')
-				{
-					rootRelativePath = rootRelativePath.Substring(1);
-				}
-				return Path.Combine(LibraryDirectoryFullPath, rootRelativePath);
+				rootRelativePath = rootRelativePath.Substring(1);
 			}
-			else
-			{
-				return LibraryDirectoryFullPath;
-			}
+			return Path.Combine(LibraryDirectoryFullPath, rootRelativePath);
 		}
 		private static INotNullEnumerable<ProjectRootElement> GetReferencedProjects(ProjectRootElement parentProject)
 		{
