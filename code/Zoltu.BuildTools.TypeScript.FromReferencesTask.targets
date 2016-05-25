@@ -5,7 +5,8 @@
 		<PropertyGroup>
 			<TypeScriptLibraryFullPath Condition=" '$(TypeScriptLibraryFullPath)' == '' ">$(ProjectDir)libraries</TypeScriptLibraryFullPath>
 			<TypeScriptLibraryCopyAll Condition=" '$(TypeScriptLibraryCopyAll)' == '' ">true</TypeScriptLibraryCopyAll>
+			<TypeScriptLibraryUseDirectoryStructure Condition=" '$(TypeScriptLibraryUseDirectoryStructure)' == '' ">false</TypeScriptLibraryUseDirectoryStructure>
 		</PropertyGroup>
-		<Zoltu.BuildTools.TypeScript.FromReferencesTask ProjectFullPath="$(MSBuildProjectFullPath)" LibraryDirectoryFullPath="$(TypeScriptLibraryFullPath)" CopyAll="$(TypeScriptLibraryCopyAll)"/>
+		<Zoltu.BuildTools.TypeScript.FromReferencesTask ProjectFullPath="$(MSBuildProjectFullPath)" LibraryDirectoryFullPath="$(TypeScriptLibraryFullPath)" CopyAll="$(TypeScriptLibraryCopyAll)" UseSourceDirectoryStructure="$(TypeScriptLibraryUseDirectoryStructure)"/>
 	</Target>
 </Project>
