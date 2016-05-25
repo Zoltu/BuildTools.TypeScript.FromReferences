@@ -73,6 +73,7 @@ namespace Zoltu.BuildTools.TypeScript
 						var sourceDirectoryPath = Path.GetDirectoryName(typeScriptFullPath);
 						Contract.Assume(!String.IsNullOrEmpty(sourceDirectoryPath));
 						string destinationPath = GetDestinationPath(sourceProjectBasePath, sourceDirectoryPath);
+						Contract.Assume(!String.IsNullOrEmpty(destinationPath));
 						Directory.CreateDirectory(destinationPath);
 						var sourceFileName = Path.GetFileNameWithoutExtension(typeScriptFullPath);
 						Contract.Assume(!String.IsNullOrEmpty(sourceFileName));
@@ -104,7 +105,6 @@ namespace Zoltu.BuildTools.TypeScript
 		{
 			Contract.Requires(sourceProjectBasePath != null);
 			Contract.Requires(sourceDirectoryPath != null);
-			Contract.Ensures(Contract.Result<string>()!=null);
 			Contract.Assume(sourceDirectoryPath.Length > sourceProjectBasePath.Length);
 			Contract.Assume(!String.IsNullOrEmpty(LibraryDirectoryFullPath));
 			var rootRelativePath = sourceDirectoryPath.Remove(0, sourceProjectBasePath.Length);
