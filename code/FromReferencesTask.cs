@@ -73,7 +73,6 @@ namespace Zoltu.BuildTools.TypeScript
 						var sourceDirectoryPath = Path.GetDirectoryName(typeScriptFullPath);
 						Contract.Assume(!String.IsNullOrEmpty(sourceDirectoryPath));
 						string destinationPath = GetDestinationPath(sourceProjectBasePath, sourceDirectoryPath);
-						Contract.Assume(!String.IsNullOrEmpty(destinationPath));
 						Directory.CreateDirectory(destinationPath);
 						var sourceFileName = Path.GetFileNameWithoutExtension(typeScriptFullPath);
 						Contract.Assume(!String.IsNullOrEmpty(sourceFileName));
@@ -105,6 +104,7 @@ namespace Zoltu.BuildTools.TypeScript
 		{
 			Contract.Requires(sourceProjectBasePath != null);
 			Contract.Requires(sourceDirectoryPath != null);
+			Contract.Ensures(!String.IsNullOrEmpty(Contract.Result<string>()));
 			Contract.Assume(sourceDirectoryPath.Length > sourceProjectBasePath.Length);
 			Contract.Assume(!String.IsNullOrEmpty(LibraryDirectoryFullPath));
 			var rootRelativePath = sourceDirectoryPath.Remove(0, sourceProjectBasePath.Length);
@@ -112,7 +112,9 @@ namespace Zoltu.BuildTools.TypeScript
 			{
 				rootRelativePath = rootRelativePath.Substring(1);
 			}
-			return Path.Combine(LibraryDirectoryFullPath, rootRelativePath);
+			string combinedPath = Path.Combine(LibraryDirectoryFullPath, rootRelativePath);
+			Contract.Assume(!String.IsNullOrEmpty(combinedPath));
+			return combinedPath;
 		}
 		private static INotNullEnumerable<ProjectRootElement> GetReferencedProjects(ProjectRootElement parentProject)
 		{
