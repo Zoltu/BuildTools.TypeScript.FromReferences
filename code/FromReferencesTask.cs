@@ -8,7 +8,7 @@ using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Zoltu.Collections.Generic.NotNull;
 using Zoltu.Linq.NotNull;
-
+using System.Collections.Generic;
 namespace Zoltu.BuildTools.TypeScript
 {
 	public class FromReferencesTask : Task
@@ -54,29 +54,42 @@ namespace Zoltu.BuildTools.TypeScript
 
 				Directory.CreateDirectory(LibraryDirectoryFullPath);
 
-				var typeScriptFullPaths = GetReferencedProjects(project)
+				var referencedProjects = GetReferencedProjects(project)
 					.NotNullToNull()
 					.Skip(1)
-					.SelectMany(x => GetTypeScriptItems(x).NotNullToNull(), GetTypeScriptFileFullPath)
 					.NotNull();
 
-				foreach (var typeScriptFullPath in typeScriptFullPaths)
+				foreach (var referencedProject in referencedProjects)
 				{
-					var sourceDirectoryPath = Path.GetDirectoryName(typeScriptFullPath);
-					Contract.Assume(!String.IsNullOrEmpty(sourceDirectoryPath));
-					var sourceFileName = Path.GetFileNameWithoutExtension(typeScriptFullPath);
-					Contract.Assume(!String.IsNullOrEmpty(sourceFileName));
+					var sourceProjectBasePath = referencedProject.DirectoryPath;
+					Contract.Assume(sourceProjectBasePath != null);
+					var typeScriptFullPaths = GetTypeScriptItems(referencedProject)
+						.NotNullToNull()
+						.Select(x => GetTypeScriptFileFullPath(referencedProject, x))
+						.NotNull();
 
-					CopyFile(sourceDirectoryPath, sourceFileName, LibraryDirectoryFullPath, ".d.ts", ".d.ts");
-					CopyFile(sourceDirectoryPath, sourceFileName, LibraryDirectoryFullPath, ".js", ".js");
-					if (CopyAll)
+					foreach (var typeScriptFullPath in typeScriptFullPaths)
 					{
-						var tsSourceFilePath = CopyFile(sourceDirectoryPath, sourceFileName, LibraryDirectoryFullPath, ".ts", ".ts.source");
-						var jsMapFilePath = CopyFile(sourceDirectoryPath, sourceFileName, LibraryDirectoryFullPath, ".js.map", ".js.map");
+						var sourceDirectoryPath = Path.GetDirectoryName(typeScriptFullPath);
+						Contract.Assume(!String.IsNullOrEmpty(sourceDirectoryPath));
+						string destinationPath = GetDestinationPath(sourceProjectBasePath, sourceDirectoryPath);
+						Directory.CreateDirectory(destinationPath);
+						var sourceFileName = Path.GetFileNameWithoutExtension(typeScriptFullPath);
+						Contract.Assume(!String.IsNullOrEmpty(sourceFileName));
 
-						UpdateSourceMap(sourceFileName, jsMapFilePath, tsSourceFilePath);
-					}
-				};
+						CopyFile(sourceDirectoryPath, sourceFileName, destinationPath, ".d.ts", ".d.ts");
+						CopyFile(sourceDirectoryPath, sourceFileName, destinationPath, ".js", ".js");
+						if (CopyAll)
+						{
+							var tsSourceFilePath = CopyFile(sourceDirectoryPath, sourceFileName, destinationPath, ".ts", ".ts.source");
+							var jsMapFilePath = CopyFile(sourceDirectoryPath, sourceFileName, destinationPath, ".js.map", ".js.map");
+
+							UpdateSourceMap(sourceFileName, jsMapFilePath, tsSourceFilePath);
+						}
+					};
+
+				}
+
 
 				return true;
 			}
@@ -87,6 +100,22 @@ namespace Zoltu.BuildTools.TypeScript
 			}
 		}
 
+		private string GetDestinationPath(string sourceProjectBasePath, string sourceDirectoryPath)
+		{
+			Contract.Requires(sourceProjectBasePath != null);
+			Contract.Requires(sourceDirectoryPath != null);
+			Contract.Ensures(!String.IsNullOrEmpty(Contract.Result<string>()));
+			Contract.Assume(sourceDirectoryPath.Length > sourceProjectBasePath.Length);
+			Contract.Assume(!String.IsNullOrEmpty(LibraryDirectoryFullPath));
+			var rootRelativePath = sourceDirectoryPath.Remove(0, sourceProjectBasePath.Length);
+			if (rootRelativePath[0] == '\\')
+			{
+				rootRelativePath = rootRelativePath.Substring(1);
+			}
+			string combinedPath = Path.Combine(LibraryDirectoryFullPath, rootRelativePath);
+			Contract.Assume(!String.IsNullOrEmpty(combinedPath));
+			return combinedPath;
+		}
 		private static INotNullEnumerable<ProjectRootElement> GetReferencedProjects(ProjectRootElement parentProject)
 		{
 			Contract.Requires(parentProject != null);
